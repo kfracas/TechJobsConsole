@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -64,7 +65,7 @@ namespace TechJobsConsole
             LoadData();
 
             List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
-            List<string> columnList = new List<string> { "core competency", "employer", "location", "position type" };
+            List<string> columnList = new List<string> (AllJobs[0].Keys);
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
