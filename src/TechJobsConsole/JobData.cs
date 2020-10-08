@@ -8,6 +8,7 @@ namespace TechJobsConsole
     class JobData
     {
         static List<Dictionary<string, string>> AllJobs = new List<Dictionary<string, string>>();
+        static IList<Dictionary<string, string>> ReadOnlyJobs = AllJobs.AsReadOnly();
         static bool IsDataLoaded = false;
 
         public static List<Dictionary<string, string>> FindAll()
@@ -26,7 +27,7 @@ namespace TechJobsConsole
 
             List<string> values = new List<string>();
 
-            foreach (Dictionary<string, string> job in AllJobs)
+            foreach (Dictionary<string, string> job in ReadOnlyJobs)
             {
                 string aValue = job[column];
 
@@ -49,12 +50,32 @@ namespace TechJobsConsole
             {
                 string aValue = row[column];
 
-                if (aValue.Contains(value))
+                if (aValue.ToLower().Contains(value.ToLower()))
                 {
                     jobs.Add(row);
                 }
             }
 
+            return jobs;
+        }
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            // load data, if not already loaded
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            List<string> columnList = new List<string> { "core competency", "employer", "location", "position type" };
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                foreach (string column in columnList)
+                {
+                    if (row[column].ToLower().Contains(value.ToLower()) & !jobs.Contains(row))
+                    {
+                        jobs.Add(row);
+                    }
+                }
+            }
             return jobs;
         }
 
